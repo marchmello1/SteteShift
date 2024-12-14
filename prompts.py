@@ -1,44 +1,79 @@
-from pydantic import BaseModel
-from typing import List, Optional, Union
+def get_comparison_prompts(source_state: str, target_state: str) -> dict:
+    """Get all comparison prompts with formatted state names"""
+    
+    return {
+        "laws": f"""Return only a JSON object comparing laws between {source_state} and {target_state}. Format:
+{{
+  "data": {{
+    "law_difference_data": [
+      {{
+        "title": "Title of the law",
+        "description": "Description of how the law differs in the target state",
+        "state_reference": "Reference to the specific state law code or statute",
+        "impact": "Brief explanation of how this difference impacts new residents",
+        "source_link": "URL to the official state or government source for verification"
+      }}
+    ]
+  }}
+}}""",
 
+        "taxes": f"""Return only a JSON object comparing taxes between {source_state} and {target_state}. Format:
+{{
+  "data": {{
+    "tax_difference_data": [
+      {{
+        "title": "Title of the tax",
+        "description": "Description of how the tax differs in the target state",
+        "state_reference": "Reference to the specific state tax code",
+        "impact": "Brief explanation of how this difference impacts new residents",
+        "source_link": "URL to the official state tax authority source"
+      }}
+    ]
+  }}
+}}""",
 
-class BaseItem(BaseModel):
-    title: str
-    description: str
-    state_reference: str
-    impact: str
-    source_link: Optional[str] = None
+        "education": f"""Return only a JSON object comparing education between {source_state} and {target_state}. Format:
+{{
+  "data": {{
+    "education_difference_data": [
+      {{
+        "title": "Title of education difference",
+        "description": "Description of how education differs in the target state",
+        "state_reference": "Reference to specific education code or policy",
+        "impact": "Brief explanation of how this difference impacts new residents",
+        "source_link": "URL to the official education department source"
+      }}
+    ]
+  }}
+}}""",
 
+        "emergency_services": f"""Return only a JSON object comparing emergency services between {source_state} and {target_state}. Format:
+{{
+  "data": {{
+    "emergency_service_difference_data": [
+      {{
+        "title": "Title of emergency service difference",
+        "description": "Description of how the service differs in the target state",
+        "state_reference": "Reference to specific emergency service regulation",
+        "impact": "Brief explanation of how this difference impacts new residents",
+        "source_link": "URL to the official emergency services source"
+      }}
+    ]
+  }}
+}}""",
 
-class LawItem(BaseItem):
-    pass
-
-class LawData(BaseModel):
-    law_difference_data: List[LawItem]
-
-class TaxItem(BaseItem):
-    pass
-
-class TaxData(BaseModel):
-    tax_difference_data: List[TaxItem]
-
-class EducationItem(BaseItem):
-    pass
-
-class EducationData(BaseModel):
-    education_difference_data: List[EducationItem]
-
-class EmergencyServiceItem(BaseItem):
-    pass
-
-class EmergencyServiceData(BaseModel):
-    emergency_service_difference_data: List[EmergencyServiceItem]
-
-class PropertyItem(BaseItem):
-    pass
-
-class PropertyData(BaseModel):
-    property_difference_data: List[PropertyItem]
-
-class Response(BaseModel):
-    data: Union[LawData, TaxData, EducationData, EmergencyServiceData, PropertyData]
+        "property": f"""Return only a JSON object comparing property between {source_state} and {target_state}. Format:
+{{
+  "data": {{
+    "property_difference_data": [
+      {{
+        "title": "Title of property difference",
+        "description": "Description of how property laws or market differs",
+        "state_reference": "Reference to specific property codes or regulations",
+        "impact": "Brief explanation of how this difference impacts new residents",
+        "source_link": "URL to the official property or real estate source"
+      }}
+    ]
+  }}
+}}"""
+    }
